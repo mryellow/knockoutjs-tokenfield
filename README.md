@@ -55,6 +55,22 @@ This will be passed if the related field is `observable`, for `observableArray` 
 	<span class="help-block"></span>
 </div>
 ```
+Output `fooModel`:
+```
+{
+	"bar1": [
+		{
+			"value": "_default",
+			"label": "_default"
+		},
+		{
+			"id": "uniqueid"
+			"value": "tag added from server",
+			"label": "tag added from server"
+		}
+	]
+}
+```
 
 ```
 <div class="form-group">
@@ -69,6 +85,12 @@ This will be passed if the related field is `observable`, for `observableArray` 
 	"data-bind" => "tokenField: fooModel.bar2, tokenFieldRemote: '../remove/json/query', tokenFieldKey: 'id', tokenFieldVal: 'value'"
 	<span class="help-block"></span>
 </div>
+```
+Output `fooModel`:
+```
+{
+	"bar2": "_default,tagid:23583353,tag added without id from server ready for creation when server detects it isn't an ID"
+}
 ```
 
 The type of output is triggered by the type of related field.
