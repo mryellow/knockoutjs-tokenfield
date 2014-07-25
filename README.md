@@ -5,22 +5,29 @@ Bootstrap-tokenfield KnockoutJS custom binding.
 
 Implments it's own models for storing extra data associated with tokens, then passes this to your external model.
 
+Tokens beginning with `_` are styled as private, can't be removed etc.
+
 #### Related field in apps KnockoutJS ####
+Link the tokenfield to your own model.
 `tokenField: fooModel.bar`
 
 #### AJAX URI for tag lookup ####
+Request AJAX to fill auto-complete dropdown.
 `tokenFieldRemote: '../tags/search'`
 
 #### HTTP Method ####
 `tokenFieldMethod: 'GET'`
 
 #### jQuery AJAX datatype option ####
+* [jQuery - AJAX docs](http://api.jquery.com/jquery.ajax/)
+* `(xml|html|json|jsonp|text)`
 `tokenFieldDatatype: 'json'`
 
 #### Querystring key for remote ####
 `tokenFieldQuery: 'q'`
 
 #### Object key to extract and pass to related field ####
+This will be passed if the related field is `observable`, for `observableArray` the whole object is returned.
 `tokenFieldKey: 'id'`
 
 #### Object key to display in tokenfield ####

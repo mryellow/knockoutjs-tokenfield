@@ -1,0 +1,24 @@
+{
+  "name": "knockoutjs-tokenfield",
+  "version": "1.0.2",
+  "homepage": "https://github.com/mryellow/knockoutjs-tokenfield",
+  "authors": [
+    "Mr-Yellow <mr-yellow@mr-yellow.com>"
+  ],
+  "description": "KnockoutJS Bootstrap-tokenfield binder",
+  "main": "src/knockoutjs-tokenfield.js",
+  "keywords": [
+    "knockoutjs",
+    "tokenfield",
+    "bootstrap",
+    "typeahead"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
