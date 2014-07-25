@@ -89,7 +89,8 @@ var tokenFieldModel = function tokenFieldModel() {
 			});
 		} else {
 			ko.utils.arrayForEach(this.items(), function(x) {
-				if(ko.unwrap(x.value) === attrs.value) item = x; // TODO: Use allBindingsAccessor().tokenFieldDisplay, means putting a rewrite of this part in init.
+				// TODO: Use allBindingsAccessor().tokenFieldDisplay
+				if(ko.unwrap(x.value) === attrs.value) item = x;
 			});
 		}
 		//console.log(ko.unwrap(this.items()));
@@ -195,12 +196,12 @@ ko.bindingHandlers.tokenField = {
 		 *
 		 * Remove from observableArray().items
 		 */
-		ko.utils.registerEventHandler(element, 'tokenfield:removedtoken', function (e) {
-			console.log('tokenfield:removedtoken');
-			console.log(e);
+	ko.utils.registerEventHandler(element, 'tokenfield:removedtoken', function (e) {
+		console.log('tokenfield:removedtoken');
+		console.log(e);
 
-			tokenBaseModel.fields[element.id].removeItem(e.attrs);
-		});
+		tokenBaseModel.fields[element.id].removeItem(e.attrs);
+	});
 
 		/**
 		 * Typeahead only, no tokenfield
@@ -263,7 +264,10 @@ ko.bindingHandlers.tokenField = {
         console.log('update');
         var observable = valueAccessor() || {};
 
+        // Does validation on allBindingsAccessor and sets defaults.
         var bindings = new tokenFieldUtils().processBindings(allBindingsAccessor);
+
+        // An `fn` util function extending both `observableArray` and `observable` to accept arrays and sort them out.
        	observable.refreshAll(ko.unwrap(tokenBaseModel.fields[element.id].items),bindings['Delimiter'],bindings['FieldKey']);
 
     }
