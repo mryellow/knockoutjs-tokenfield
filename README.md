@@ -60,6 +60,7 @@ This will be passed if the related field is `observable`, for `observableArray` 
 
 ### Examples ###
 
+##### Tags as array of full objects #####
 ```
 <div class="form-group">
 	<label class="control-label" for="tags1">Tags as array of full objects</label>
@@ -90,6 +91,7 @@ Output `fooModel`:
 }
 ```
 
+##### Tags as CSV of field specified by tokenFieldKey only #####
 ```
 <div class="form-group">
 	<label class="control-label" for="tags2">Tags as CSV of field specified by `tokenFieldKey` only</label>
@@ -109,6 +111,18 @@ Output `fooModel`:
 ```
 {
 	"bar2": "_default,tagid:23583353,tag added without id from server (pressed tab and created new tag without match in drop-down) ready for lookup/creation when server detects it isn't an ID prefix"
+}
+```
+
+##### CSS to enable '_private' tokens #####
+```
+.token.tt-private {
+  background-color: #428bca;
+  color: #fff;
+}
+
+.token.tt-private a.close {
+  visibility: hidden;
 }
 ```
 
