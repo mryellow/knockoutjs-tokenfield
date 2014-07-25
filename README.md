@@ -5,11 +5,13 @@ Bootstrap-tokenfield KnockoutJS custom binding.
 
 Implements it's own KnockoutJS models for storing extra data associated with tokens, then passes this to your external model.
 
-Each field added to a page has it's own model for keeping track of selections.
-
 Tokens beginning with `_` are styled as private, can't be removed etc.
 
 * [Stackoverflow explaination](http://stackoverflow.com/a/24946651/2438830)
+
+### TODO ###
+
+Each field added to a page has it's own model for keeping track of selections, they are intern stored in an array of fields. This meta-data already exists in the DOM attached to each token and the duplication could be done away with by extending the tokenfield DOM to be observable.
 
 ### Install ###
 
