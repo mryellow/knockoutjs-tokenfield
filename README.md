@@ -89,7 +89,7 @@ Output `fooModel`:
 Output `fooModel`:
 ```
 {
-	"bar2": "_default,tagid:23583353,tag added without id from server ready for creation when server detects it isn't an ID"
+	"bar2": "_default,tagid:23583353,tag added without id from server (pressed tab, created new tag without match in drop-down) ready for creation when server detects it isn't an ID"
 }
 ```
 

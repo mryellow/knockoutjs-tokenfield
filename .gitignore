@@ -1,6 +1,5 @@
 .DS_Store
 .idea/*
-dist/*
 build_cache/*
 node_modules/*
 bower_components/*
