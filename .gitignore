@@ -1,2 +1,12 @@
-/cache/
-/config/development/
+.DS_Store
+.idea/*
+dist/*
+build_cache/*
+node_modules/*
+bower_components/*
+*.iml
+*.sublime-project
+*.sublime-workspace
+composer.lock
+composer.phar
+output
