@@ -116,3 +116,31 @@ The type of output is triggered by the type of related field.
 
 * `observableArray` gets an array of objects
 * `observable` gets a CSV of `tokenFieldKey` index key.
+
+#### Parent application ####
+```
+<script language="javascript" type="text/javascript">
+// Test parent model
+var fooModel = {};
+
+$(function() {
+	console.log('main');
+
+	fooModel = {
+		bar1: ko.observableArray([]),
+		bar2: ko.observable()
+	}
+
+	var tokenfield = new tokenFieldUtils();
+	tokenfield.addTokenField(document.getElementById('tags1'));
+	tokenfield.addTokenField(document.getElementById('tags2'));
+
+	ko.applyBindings(fooModel, document.getElementById('debug'));
+
+});
+</script>
+
+<hr />
+<h2>Debug</h2>
+<pre id="debug" data-bind="text: ko.toJSON($data, null, 2)"></pre>
+```
