@@ -16,7 +16,6 @@
  * @author: Mr-Yellow <mr-yellow@mr-yellow.com>
  */
 
-console.log('include');
 /**
  * Utils global namespace.
  */

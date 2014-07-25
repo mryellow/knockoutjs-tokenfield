@@ -9,6 +9,12 @@ Each field added to a page has it's own model for keeping track of selections.
 
 Tokens beginning with `_` are styled as private, can't be removed etc.
 
+* [Stackoverflow explaination](http://stackoverflow.com/a/24946651/2438830)
+
+### Install ###
+
+`bower install knockoutjs-tokenfield`
+
 ### Links ###
 
 * [KnockoutJS](http://knockoutjs.com/)
@@ -92,7 +98,6 @@ Output `fooModel`:
 		name="tags2" 
 		value="_default" 
 		class="form-group" placeholder="">
-	"data-bind" => "tokenField: fooModel.bar2, tokenFieldRemote: '../remove/json/query', tokenFieldKey: 'id', tokenFieldVal: 'value'"
 	<span class="help-block"></span>
 </div>
 ```
