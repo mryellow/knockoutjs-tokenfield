@@ -6,7 +6,10 @@
     "Mr-Yellow <mr-yellow@mr-yellow.com>"
   ],
   "description": "KnockoutJS Bootstrap-tokenfield binder",
-  "main": "src/knockoutjs-tokenfield.js",
+  "main": [
+    "src/knockoutjs-tokenfield.css",
+    "src/knockoutjs-tokenfield.js",
+  ],
   "keywords": [
     "knockoutjs",
     "tokenfield",

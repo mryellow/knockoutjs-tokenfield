@@ -2,7 +2,10 @@
   "name": "knockoutjs-tokenfield",
   "version": "1.0.2",
   "description": "KnockoutJS Bootstrap-tokenfield binder",
-  "main": "src/knockoutjs-tokenfield.js",
+  "main": [
+    "src/knockoutjs-tokenfield.css",
+    "src/knockoutjs-tokenfield.js",
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
