@@ -64,7 +64,7 @@ This will be passed if the related field is `observable`, for `observableArray` 
 <div class="form-group">
 	<label class="control-label" for="tags1">Tags as array of full objects</label>
 	<input 
-		data-bind="tokenField: fooModel.bar1, tokenFieldRemote: '../remove/json/query'" 
+		data-bind="tokenField: fooModel.bar1, tokenFieldRemote: '../remote/json/query'" 
 		type="text" 
 		id="tags1" 
 		name="tags1" 
@@ -94,7 +94,9 @@ Output `fooModel`:
 <div class="form-group">
 	<label class="control-label" for="tags2">Tags as CSV of field specified by `tokenFieldKey` only</label>
 	<input 
-		data-bind="tokenField: fooModel.bar2, tokenFieldRemote: '../remove/json/query', tokenFieldKey: 'id', tokenFieldVal: 'value'" 
+		data-bind="tokenField: fooModel.bar2, tokenFieldRemote: '../remote/json/query', 
+		tokenFieldKey: 'id', // The key to be CSV'd and sent to related model if it isn't an array.
+		tokenFieldVal: 'value'" // The key to displayed in autocomplete.
 		type="text" 
 		id="tags2" 
 		name="tags2" 
