@@ -3,9 +3,19 @@ knockoutjs-tokenfield
 
 Bootstrap-tokenfield KnockoutJS custom binding.
 
-Implments it's own models for storing extra data associated with tokens, then passes this to your external model.
+Implements it's own KnockoutJS models for storing extra data associated with tokens, then passes this to your external model.
+
+Each field added to a page has it's own model for keeping track of selections.
 
 Tokens beginning with `_` are styled as private, can't be removed etc.
+
+### Links ###
+
+* [KnockoutJS](http://knockoutjs.com/)
+* [Bootstrap Tokenfield](http://sliptree.github.io/bootstrap-tokenfield/)
+* [Twitter Typeahead](https://twitter.github.io/typeahead.js/)
+    + Used as engine behind autocomplete for token selection.
+    + Can likely be used as straight autocomplete without tokenfield (todo).
 
 ##### Related field in apps KnockoutJS #####
 Link the tokenfield to your own model.
