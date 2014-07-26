@@ -3,15 +3,11 @@ knockoutjs-tokenfield
 
 Bootstrap-tokenfield KnockoutJS custom binding.
 
-Implements it's own KnockoutJS models for storing extra data associated with tokens, then passes this to your external model.
+The whole object returned by AJAX is added as a new token, then saved in your model where it can then be processed with computed observables.
 
-Tokens beginning with `_` are styled as private, can't be removed etc.
+Tokens beginning with `_` are styled as private, with close button hidden.
 
 * [Stackoverflow explaination](http://stackoverflow.com/a/24946651/2438830)
-
-### TODO ###
-
-Each field added to a page has it's own model for keeping track of selections, they are intern stored in an array of fields. This meta-data already exists in the DOM attached to each token and the duplication could be done away with by extending the tokenfield DOM to be observable.
 
 ### Install ###
 
@@ -37,33 +33,39 @@ Request AJAX to fill auto-complete dropdown.
 
 ##### HTTP Method #####
 `tokenFieldMethod: 'GET'`
+* default: 'GET'
 
 ##### jQuery AJAX datatype option #####
 * [jQuery - AJAX docs](http://api.jquery.com/jquery.ajax/)
 * `(xml|html|json|jsonp|text)`
 
 `tokenFieldDatatype: 'json'`
+* default: 'json'
 
 ##### Querystring key for remote #####
 `tokenFieldQuery: 'q'`
+* default: 'q'
 
 ##### Object key to extract and pass to related field #####
 This will be passed if the related field is `observable`, for `observableArray` the whole object is returned.
 
-`tokenFieldKey: 'id'`
+`tokenFieldKeyIndex: 'id'`
+* default: 'value'
 
 ##### Object key to display in tokenfield #####
-`tokenFieldValue: 'value'`
+`tokenFieldKeyDisplay: 'label'`
+* default: 'label'
 
 ##### CSV Delimiter #####
 `tokenFieldDelimiter: ','`
+* default: ','
 
 ### Examples ###
 
-##### Tags as array of full objects #####
+##### Auto-complete tags #####
 ```
 <div class="form-group">
-	<label class="control-label" for="tags1">Tags as array of full objects</label>
+	<label class="control-label" for="tags1">Tags</label>
 	<input 
 		data-bind="tokenField: fooModel.bar1, tokenFieldRemote: '../remote/json/query'" 
 		type="text" 
@@ -83,7 +85,13 @@ Output `fooModel`:
 			"label": "_default"
 		},
 		{
-			"id": "uniqueid"
+			"field": "extra data"
+			"value": "uniqueid",
+			"label": "tag pushed from model"
+		},
+		{
+			"id": "id from AJAX"
+			"field": "field from AJAX"
 			"value": "tag added from server",
 			"label": "tag added from server"
 		}
@@ -91,27 +99,28 @@ Output `fooModel`:
 }
 ```
 
-##### Tags as CSV of field specified by tokenFieldKey only #####
+##### Parent application #####
 ```
-<div class="form-group">
-	<label class="control-label" for="tags2">Tags as CSV of field specified by `tokenFieldKey` only</label>
-	<input 
-		data-bind="tokenField: fooModel.bar2, tokenFieldRemote: '../remote/json/query', 
-		tokenFieldKey: 'id', // The key to be CSV'd and sent to related model if it isn't an array.
-		tokenFieldVal: 'value'" // The key to displayed in autocomplete.
-		type="text" 
-		id="tags2" 
-		name="tags2" 
-		value="_default" 
-		class="form-group" placeholder="">
-	<span class="help-block"></span>
-</div>
-```
-Output `fooModel`:
-```
-{
-	"bar2": "_default,tagid:23583353,tag added without id from server (pressed tab and created new tag without match in drop-down) ready for lookup/creation when server detects it isn't an ID prefix"
-}
+<script language="javascript" type="text/javascript">
+// Test parent model
+var fooModel = {};
+
+$(function() {
+	console.log('main');
+
+	fooModel = {
+		bar1: ko.observableArray([])
+	}
+
+	ko.applyBindings(fooModel);
+	ko.applyBindings(fooModel, document.getElementById('debug'));
+
+});
+</script>
+
+<hr />
+<h2>Debug</h2>
+<pre id="debug" data-bind="text: ko.toJSON($data, null, 2)"></pre>
 ```
 
 ##### CSS to enable '_private' tokens #####
@@ -126,35 +135,59 @@ Output `fooModel`:
 }
 ```
 
-The type of output is triggered by the type of related field.
+##### CSV computed observable #####
 
-* `observableArray` gets an array of objects
-* `observable` gets a CSV of `tokenFieldKey` index key.
+This will take an array of tokens and transform it into a CSV of IDs or display keys depending on what is available.
 
-#### Parent application ####
 ```
-<script language="javascript" type="text/javascript">
-// Test parent model
-var fooModel = {};
+var _dummyObservable = ko.observable();
+this.area_id = ko.computed({
+	/**
+	 * Construct CSV from array of objects
+	 */
+    read: function () {
+    	console.log('computed.read');
+    	var self = this;
 
-$(function() {
-	console.log('main');
+		// Retrieve and ignore the value, thus giving computed subscription to itself.
+    	_dummyObservable();
 
-	fooModel = {
-		bar1: ko.observableArray([]),
-		bar2: ko.observable()
-	}
+        var csv = '';
+		ko.utils.arrayForEach(ko.unwrap(self.areas), function(item) {
+			console.log('item:'+JSON.stringify(item));
+			if (csv != '') csv += ',';
+			// Our ID from AJAX response.
+			if (item.id !== undefined) {
+				csv += item.id;
+			// Tokenfield's ID form `value` attrs.
+			} else if (item.value !== undefined) {
+				csv += item.value;
+			// The label, no ID available.
+			} else {
+				csv += item.label;
+			}					
+		});
 
-	var tokenfield = new tokenFieldUtils();
-	tokenfield.addTokenField(document.getElementById('tags1'));
-	tokenfield.addTokenField(document.getElementById('tags2'));
+        return csv;
+    },
 
-	ko.applyBindings(fooModel, document.getElementById('debug'));
+    /**
+     * Push set CSV into array of objects.
+     */
+    write: function (value) {
+    	console.log('computed.write');
+    	var self = this;
 
+    	ko.utils.arrayForEach(value.split(','), function(item) {
+    		self.areas.push({
+    			label: item,
+    			value: item
+    		});
+    	});
+
+    	_dummyObservable.notifySubscribers();
+    },
+    owner: this,
 });
-</script>
-
-<hr />
-<h2>Debug</h2>
-<pre id="debug" data-bind="text: ko.toJSON($data, null, 2)"></pre>
 ```
+
