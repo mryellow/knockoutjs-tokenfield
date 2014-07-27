@@ -175,7 +175,7 @@ ko.bindingHandlers.tokenField = {
     /**
      * ko binding update
      */
-    update: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+    update: function(element, valueAccessor, allBindingsAccessor, deprecated, bindingContext) {
         console.log('--UPDATE:'+element.id);
         var observable = valueAccessor() || { };
         var peeked = ko.unwrap(observable.peek());

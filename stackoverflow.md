@@ -90,7 +90,7 @@ So that about covers the internals of the binder. Now we're saving everything di
 	    	var self = this;
 
 	    	ko.utils.arrayForEach(value.split(','), function(item) {
-	    		self.areas.push({
+	    		self.tags.push({
 	    			label: item,
 	    			value: item
 	    		});
