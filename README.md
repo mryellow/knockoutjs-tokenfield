@@ -8,6 +8,13 @@ The whole object returned by AJAX is added as a new token, then saved in your mo
 Tokens beginning with `_` are styled as private, with close button hidden.
 
 * [Stackoverflow explaination](http://stackoverflow.com/a/24946651/2438830)
+### TODO ###
+
+* When only an autocomplete is needed typeahead should be used without tokenfield.
+* Bloodhound suggestion engine integration.
+	+ [Typeahead Bloodhound Docs](https://github.com/twitter/typeahead.js/blob/master/doc/bloodhound.md)
+
+I'll be happy without Bloodhound until the rest of my current project comes along, fork it if needed and I'll pull in any changes that gracefully handle each case.
 
 ### Install ###
 
