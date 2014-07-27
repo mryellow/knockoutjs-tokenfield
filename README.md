@@ -47,7 +47,7 @@ Request AJAX to fill auto-complete dropdown.
 * default: 'q'
 
 ##### Object key to extract and pass to related field #####
-This will be passed if the related field is `observable`, for `observableArray` the whole object is returned.
+This doesn't really do anything. Could be used to control CSV construction.
 
 `tokenFieldKeyIndex: 'id'`
 * default: 'value'
@@ -202,7 +202,6 @@ ko.observableArray['fn'].computeCsv = function() {
 	return ko.computed({
         read: function () {
         	console.log('computed.read');
-			// Retrieve and ignore the value, thus giving computed subscription to itself.
 
             var csv = '';
 			ko.utils.arrayForEach(ko.unwrap(self), function(item) {
