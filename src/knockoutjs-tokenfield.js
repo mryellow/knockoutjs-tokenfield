@@ -93,7 +93,7 @@ ko.bindingHandlers.tokenField = {
 			}
 
 			// Allow `update` to temporarily disable pushing back when this event fires.
-			if (ko.tokenfield[element.id].handlerEnabled == true) observable.push(e.attrs);
+			if (ko.tokenfield[element.id].handlerEnabled === true) observable.push(e.attrs);
 
 		});
 
@@ -163,7 +163,7 @@ ko.bindingHandlers.tokenField = {
 								response([]);
 							}
 						});
-					}
+					};
 				})(),
 			}]
 		});	
