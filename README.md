@@ -141,7 +141,7 @@ This will take an array of tokens and transform it into a CSV of IDs or display 
 
 ```
 var _dummyObservable = ko.observable();
-this.area_id = ko.computed({
+this.product_ids = ko.computed({
 	/**
 	 * Construct CSV from array of objects
 	 */
@@ -153,7 +153,7 @@ this.area_id = ko.computed({
     	_dummyObservable();
 
         var csv = '';
-		ko.utils.arrayForEach(ko.unwrap(self.areas), function(item) {
+		ko.utils.arrayForEach(ko.unwrap(self.products), function(item) {
 			console.log('item:'+JSON.stringify(item));
 			if (csv != '') csv += ',';
 			// Our ID from AJAX response.
@@ -191,3 +191,48 @@ this.area_id = ko.computed({
 });
 ```
 
+Same thing again as an `observableArray` reusable `fn`. Returns a computed for use in another field.
+
+Usage: `self.product_ids = self.products.computeCsv();`.
+```
+ko.observableArray['fn'].computeCsv = function() {
+	console.log('observableArray.computeCsv');
+	var self = this;		
+
+	return ko.computed({
+        read: function () {
+        	console.log('computed.read');
+			// Retrieve and ignore the value, thus giving computed subscription to itself.
+
+            var csv = '';
+			ko.utils.arrayForEach(ko.unwrap(self), function(item) {
+				console.log('item:'+JSON.stringify(item));
+				if (csv != '') csv += ',';
+				// Our ID from AJAX response.
+				if (item.id !== undefined) {
+					csv += item.id;
+				// Tokenfield's ID form `value` attrs.
+				} else if (item.value !== undefined) {
+					csv += item.value;
+				// The label, no ID available.
+				} else {
+					csv += item.label;
+				}					
+			});
+
+	        return csv;
+        },
+		write: function (value) {
+        	console.log('computed.write');
+
+        	ko.utils.arrayForEach(value.split(','), function(item) {
+        		self.push({
+        			label: item,
+        			value: item
+        		});
+        	});
+
+        }
+	});
+};
+```
