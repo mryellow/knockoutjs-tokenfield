@@ -159,7 +159,7 @@ this.area_id = ko.computed({
 			// Our ID from AJAX response.
 			if (item.id !== undefined) {
 				csv += item.id;
-			// Tokenfield's ID form `value` attrs.
+			// Tokenfield's ID from `value` attrs.
 			} else if (item.value !== undefined) {
 				csv += item.value;
 			// The label, no ID available.
