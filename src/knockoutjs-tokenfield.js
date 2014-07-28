@@ -110,7 +110,11 @@ ko.bindingHandlers.tokenField = {
 			var item;
 			// Find item using tokenfield default values, other values are not in tokenfield meta-data.
 			ko.utils.arrayForEach(peeked, function(x) {
-				if (ko.unwrap(x.label) === e.attrs.label && ko.unwrap(x.value) === e.attrs.value) item = x;
+				if (ko.unwrap(x.id) === e.attrs.id) {
+					item = x;
+				} else if (ko.unwrap(x.label) === e.attrs.label && ko.unwrap(x.value) === e.attrs.value) {
+					item = x;
+				}
 			});
 
 			observable.remove(item);

@@ -1,4 +1,5 @@
-http://stackoverflow.com/a/24976740/2438830
+Updated answer, 'correct' pattern
+==============
 
 I've created a KnockoutJS binding for bootstrap-tokenfield.
 
@@ -49,57 +50,49 @@ When removing tokens the extra meta-data that came from our AJAX autocomplete is
 		observable.remove(item); // Validation of `item` likely needed
 	});
 
-So that about covers the internals of the binder. Now we're saving everything directly into the bound model as KnockoutJS would expect, without the duplication of data or sync issues. Lets get that CSV field back, using a computed observable puts this code in it's proper place and exposes the ability to throttle the calculations if needbe.
+So that about covers the internals of the binder. Now we're saving everything directly into the bound model as KnockoutJS would expect, without the duplication of data or sync issues. Lets get that CSV field back, using a `observableArray.fn` which returns a computed is nice and reusable.
 
-	var _dummyObservable = ko.observable();
-	this.tags_csv = ko.computed({
-		/**
-		 * Construct CSV from array of objects
-		 */
-	    read: function () {
-	    	console.log('computed.read');
-	    	var self = this;
+Usage: `self.tags_csv = self.tags.computeCsv();`.
 
-			// Retrieve and ignore the value, thus giving computed subscription to itself.
-	    	_dummyObservable();
+	ko.observableArray['fn'].computeCsv = function() {
+		console.log('observableArray.computeCsv');
+		var self = this;		
 
-	        var csv = '';
-			ko.utils.arrayForEach(ko.unwrap(self.tags), function(item) {
-				console.log('item:'+JSON.stringify(item));
-				if (csv != '') csv += ',';
-				// Our ID from AJAX response.
-				if (item.id !== undefined) {
-					csv += item.id;
-				// Tokenfield's ID from `value` attrs.
-				} else if (item.value !== undefined) {
-					csv += item.value;
-				// The label, no ID available.
-				} else {
-					csv += item.label;
-				}					
-			});
+		return ko.computed({
+	        read: function () {
+	        	console.log('computed.read');
 
-	        return csv;
-	    },
+	            var csv = '';
+				ko.utils.arrayForEach(ko.unwrap(self), function(item) {
+					console.log('item:'+JSON.stringify(item));
+					if (csv != '') csv += ',';
+					// Our ID from AJAX response.
+					if (item.id !== undefined) {
+						csv += item.id;
+					// Tokenfield's ID form `value` attrs.
+					} else if (item.value !== undefined) {
+						csv += item.value;
+					// The label, no ID available.
+					} else {
+						csv += item.label;
+					}					
+				});
 
-	    /**
-	     * Push set CSV into array of objects.
-	     */
-	    write: function (value) {
-	    	console.log('computed.write');
-	    	var self = this;
+		        return csv;
+	        },
+			write: function (value) {
+	        	console.log('computed.write');
 
-	    	ko.utils.arrayForEach(value.split(','), function(item) {
-	    		self.tags.push({
-	    			label: item,
-	    			value: item
-	    		});
-	    	});
+	        	ko.utils.arrayForEach(value.split(','), function(item) {
+	        		self.push({
+	        			label: item,
+	        			value: item
+	        		});
+	        	});
 
-	    	_dummyObservable.notifySubscribers();
-	    },
-	    owner: this,
-	});
+	        }
+		});
+	};
 
 Now we have an array of objects and a CSV representation in our model, ready to be mapped or manipulated before sending to server.
 
