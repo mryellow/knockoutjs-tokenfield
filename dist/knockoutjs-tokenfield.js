@@ -1,2 +1,193 @@
-/*! knockoutjs-tokenfield - v1.0.3 - 29-07-2014 */
-ko.tokenfield={},ko.bindingHandlers.tokenField={init:function(a,b,c){var d=b()||{};if(ko.tokenfield[a.id]={},ko.tokenfield[a.id].handlerEnabled=!0,ko.tokenfield[a.id].bindings={},ko.tokenfield[a.id].bindings.Remote=c().tokenFieldRemote,ko.tokenfield[a.id].bindings.Method=c().tokenFieldMethod,ko.tokenfield[a.id].bindings.Datatype=c().tokenFieldDatatype,ko.tokenfield[a.id].bindings.Query=c().tokenFieldQuery,ko.tokenfield[a.id].bindings.KeyIndex=c().tokenFieldKeyIndex,ko.tokenfield[a.id].bindings.KeyDisplay=c().tokenFieldKeyDisplay,ko.tokenfield[a.id].bindings.Delimiter=c().tokenFieldDelimiter,void 0===ko.tokenfield[a.id].bindings.Remote)throw"Tokenfield remote server required.";void 0===ko.tokenfield[a.id].bindings.Method&&(ko.tokenfield[a.id].bindings.Method="GET"),void 0===ko.tokenfield[a.id].bindings.Datatype&&(ko.tokenfield[a.id].bindings.Datatype="json"),void 0===ko.tokenfield[a.id].bindings.Query&&(ko.tokenfield[a.id].bindings.Query="q"),void 0===ko.tokenfield[a.id].bindings.KeyIndex&&(ko.tokenfield[a.id].bindings.KeyIndex="value"),void 0===ko.tokenfield[a.id].bindings.KeyDisplay&&(ko.tokenfield[a.id].bindings.KeyDisplay="label"),void 0===ko.tokenfield[a.id].bindings.Delimiter&&(ko.tokenfield[a.id].bindings.Delimiter=","),ko.utils.domNodeDisposal.addDisposeCallback(a,function(){$(a).tokenfield("destroy")}),ko.utils.registerEventHandler(a,"tokenfield:createdtoken",function(b){0===b.attrs[ko.tokenfield[a.id].bindings.KeyDisplay].indexOf("_")&&$(b.relatedTarget).addClass("tt-private"),ko.tokenfield[a.id].handlerEnabled===!0&&d.push(b.attrs)}),ko.utils.registerEventHandler(a,"tokenfield:removedtoken",function(a){var b,c=d.peek();ko.utils.arrayForEach(c,function(c){ko.unwrap(c.id)===a.attrs.id?b=c:ko.unwrap(c.label)===a.attrs.label&&ko.unwrap(c.value)===a.attrs.value&&(b=c)}),d.remove(b)}),$(a).tokenfield({delimiter:ko.tokenfield[a.id].bindings.Delimiter,allowEditing:!1,createTokensOnBlur:!0,typeahead:[null,{name:a.id,displayKey:ko.tokenfield[a.id].bindings.KeyDisplay,source:function(){var b;return function(c,d){b&&b.abort(),c=c.split(",").reverse()[0].trim(),req_data={},req_data[ko.tokenfield[a.id].bindings.Query]=c,b=$.ajax({url:ko.tokenfield[a.id].bindings.Remote,data:req_data,type:ko.tokenfield[a.id].bindings.Method,dataType:ko.tokenfield[a.id].bindings.Datatype,success:function(a){d(a)},error:function(){d([])}})}}()}]})},update:function(a,b){var c=b()||{},d=ko.unwrap(c.peek());ko.tokenfield[a.id].handlerEnabled=!1,$(a).tokenfield("setTokens",d),ko.tokenfield[a.id].handlerEnabled=!0}};
+define(["jquery","knockout"], function($,ko) {
+console.log('include');
+
+ko.tokenfield = {};
+
+/**
+ * Tokenfield custom binding
+ */
+ko.bindingHandlers.tokenField = {
+
+	/**
+     * ko binding init
+     */
+    init: function(element, valueAccessor, allBindingsAccessor, deprecated, bindingContext) {
+    	console.log('--INIT:'+element.id);
+
+		var observable = valueAccessor() || { };
+		//var bindings = new tokenFieldUtils().processBindings(allBindingsAccessor);
+
+		/**
+		 * Setup config for element in global namespace.
+		 */
+		ko.tokenfield[element.id] = {};
+		ko.tokenfield[element.id].handlerEnabled = true;
+
+		ko.tokenfield[element.id].bindings = {};
+
+		ko.tokenfield[element.id].bindings['Remote']		= allBindingsAccessor().tokenFieldRemote;
+		ko.tokenfield[element.id].bindings['Method']		= allBindingsAccessor().tokenFieldMethod;
+		ko.tokenfield[element.id].bindings['Datatype']		= allBindingsAccessor().tokenFieldDatatype;
+		ko.tokenfield[element.id].bindings['Query']			= allBindingsAccessor().tokenFieldQuery;
+		ko.tokenfield[element.id].bindings['KeyIndex']		= allBindingsAccessor().tokenFieldKeyIndex;
+		ko.tokenfield[element.id].bindings['KeyDisplay']	= allBindingsAccessor().tokenFieldKeyDisplay;
+		ko.tokenfield[element.id].bindings['Delimiter']		= allBindingsAccessor().tokenFieldDelimiter;
+
+		if (ko.tokenfield[element.id].bindings['Remote']	=== undefined) throw('Tokenfield remote server required.');
+		if (ko.tokenfield[element.id].bindings['Method']	=== undefined) ko.tokenfield[element.id].bindings['Method']		= 'GET';
+		if (ko.tokenfield[element.id].bindings['Datatype']	=== undefined) ko.tokenfield[element.id].bindings['Datatype']	= 'json';
+		if (ko.tokenfield[element.id].bindings['Query']		=== undefined) ko.tokenfield[element.id].bindings['Query']		= 'q';
+		if (ko.tokenfield[element.id].bindings['KeyIndex']	=== undefined) ko.tokenfield[element.id].bindings['KeyIndex']	= 'value';
+		if (ko.tokenfield[element.id].bindings['KeyDisplay']=== undefined) ko.tokenfield[element.id].bindings['KeyDisplay']	= 'label';
+		if (ko.tokenfield[element.id].bindings['Delimiter']	=== undefined) ko.tokenfield[element.id].bindings['Delimiter']	= ',';
+
+		/**
+		 * Destroy tokenfield
+		 *
+		 * Handle disposal (if KO removes by the template binding)
+		 */
+		ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+			console.log('Destroy tokenfield');
+			$(element).tokenfield('destroy');
+			// TODO: Destroy tokenFieldModel.
+		});
+
+		/**
+		 * Create token
+		 *
+		 * Push into observableArray().items
+		 */
+		 /*
+		ko.utils.registerEventHandler(element, 'tokenfield:createtoken', function (e) {
+			console.log('tokenfield:createtoken:'+this.id);
+			//e.attrs.tokenfieldFromUi = true;
+			console.log(JSON.stringify(e.attrs));
+		});
+		*/
+
+		
+		ko.utils.registerEventHandler(element, 'tokenfield:createdtoken', function (e) {
+			console.log('tokenfield:createdtoken:'+this.id);
+			console.log(JSON.stringify(e.attrs));
+
+		    // Detect private token created.
+			if (e.attrs[ko.tokenfield[element.id].bindings['KeyDisplay']].indexOf("_") === 0) {
+				console.log('tt-private');
+				$(e.relatedTarget).addClass('tt-private');
+			}
+
+			// Allow `update` to temporarily disable pushing back when this event fires.
+			if (ko.tokenfield[element.id].handlerEnabled === true) observable.push(e.attrs);
+
+		});
+
+		/**
+		 * Remove token
+		 *
+		 * Remove from observableArray().items
+		 */
+		ko.utils.registerEventHandler(element, 'tokenfield:removedtoken', function (e) {
+			console.log('tokenfield:removedtoken:'+e.id);
+			console.log(JSON.stringify(e.attrs));
+
+			var peeked = observable.peek();
+			var item;
+			// Find item using tokenfield default values, other values are not in tokenfield meta-data.
+			ko.utils.arrayForEach(peeked, function(x) {
+				if (ko.unwrap(x.id) === e.attrs.id) {
+					item = x;
+				} else if (ko.unwrap(x.label) === e.attrs.label && ko.unwrap(x.value) === e.attrs.value) {
+					item = x;
+				}
+			});
+
+			observable.remove(item);
+		});
+
+		/**
+		 * Typeahead only, no tokenfield
+		 *
+		 * @todo: If delimiter isn't set only Typeahead is needed.
+		  */
+		/*
+		ko.utils.registerEventHandler(element, 'typeahead:selected typeahead:autocompleted', function (e) {
+			console.log('typeahead:selected typeahead:autocompleted');
+			console.log(e);
+			valueAccessor().value = e.attrs.value;	
+		});
+		*/
+
+		/**
+		 * Initalise tokenfield.
+		 */
+		$(element).tokenfield({
+			delimiter: ko.tokenfield[element.id].bindings['Delimiter'], 
+			allowEditing: false, 
+			createTokensOnBlur: true, 
+			typeahead: [null, {
+				name: element.id,
+				displayKey: ko.tokenfield[element.id].bindings['KeyDisplay'],
+				source: (function() {
+					var xhr;
+					return function(request, response) {
+						if (xhr) {
+							xhr.abort();
+						}
+
+						// Split and get last token entered.
+						request = request.split(",").reverse()[0].trim();
+						req_data = {};
+						req_data[ko.tokenfield[element.id].bindings['Query']] = request;
+						
+						xhr = $.ajax({
+							url: ko.tokenfield[element.id].bindings['Remote'],
+							data: req_data,
+							type: ko.tokenfield[element.id].bindings['Method'],
+							dataType: ko.tokenfield[element.id].bindings['Datatype'],
+							success: function(data) {
+								response(data);
+							},
+							error: function() {
+								response([]);
+							}
+						});
+					};
+				})(),
+			}]
+		});	
+
+		//return { controlsDescendantBindings: true };
+
+    },
+
+    /**
+     * ko binding update
+     */
+    update: function(element, valueAccessor, allBindingsAccessor, deprecated, bindingContext) {
+        console.log('--UPDATE:'+element.id);
+        var observable = valueAccessor() || { };
+        var peeked = ko.unwrap(observable.peek());
+        console.log(JSON.stringify(peeked));
+
+        ko.tokenfield[element.id].handlerEnabled = false;
+
+		$(element).tokenfield('setTokens',peeked);
+
+		/*
+		Optional loop through, set tokens and adjust values.
+		$(element).tokenfield('setTokens',[]);
+        if (peeked.length > 0) {
+    		console.log('Create tokens from array');
+    		$.each(peeked, function(index, value) {
+    			console.log('item:'+JSON.stringify(value));
+    			value.foobar = true;
+    			$(element).tokenfield('createToken', value);
+    		});
+    	}
+    	*/
+
+		ko.tokenfield[element.id].handlerEnabled = true;
+    }
+
+};
+});

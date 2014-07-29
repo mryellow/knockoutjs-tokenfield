@@ -32,7 +32,7 @@ grunt.initConfig({
 			files: [
 				{
 					expand: true,
-					cwd: 'src/',
+					cwd: 'build/',
 					src: ['**/*.js','!**/*.min.js'],
 					dest: 'build/',
 					ext: '.min.js',
@@ -46,8 +46,9 @@ grunt.initConfig({
 	copy: {
 		dist: {
 			files: [
-				{'dist/<%= pkg.name %>.css': ['build/**/*.css']},
-				{'dist/<%= pkg.name %>.js': ['build/**/*.js']}
+				{'dist/<%= pkg.name %>.css': ['build/<%= pkg.name %>.css']},
+				{'dist/<%= pkg.name %>.js': ['build/<%= pkg.name %>.js']},
+				{'dist/<%= pkg.name %>.min.js': ['build/<%= pkg.name %>.min.js']}
 			]
 		}
 	}
