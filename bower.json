@@ -7,8 +7,8 @@
   ],
   "description": "KnockoutJS Bootstrap-tokenfield binder",
   "main": [
-    "src/knockoutjs-tokenfield.css",
-    "src/knockoutjs-tokenfield.js",
+    "dist/knockoutjs-tokenfield.css",
+    "dist/knockoutjs-tokenfield.min.js"
   ],
   "keywords": [
     "knockoutjs",
