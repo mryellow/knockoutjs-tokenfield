@@ -1,0 +1,9 @@
+
+.token.tt-private {
+  background-color: #428bca;
+  color: #fff;
+}
+
+.token.tt-private a.close {
+  visibility: hidden;
+}
