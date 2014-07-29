@@ -1,6 +1,6 @@
 .DS_Store
 .idea/*
-build_cache/*
+build/*
 node_modules/*
 bower_components/*
 *.iml

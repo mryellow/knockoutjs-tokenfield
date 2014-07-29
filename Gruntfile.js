@@ -5,23 +5,18 @@ grunt.initConfig({
 	pkg: grunt.file.readJSON('package.json'),
 
 	concat: {
-		css: {
-			options: {
-				stripBanners: {
-					separator: "\n",
-					block: true, /*! ...will be untouched... */
-					line: true
-				}
-			},
-			files: [{
-				expand: true,
-				cwd: 'build_cache/css/',
-				src: ['**/*.css','!**/*.min.css'], // Skip distributed minified
-				dest: 'build_cache/concat.css/',
-				ext: '.css',
-				extDot: 'first',
-				filter: 'isFile'
-			},{'dist/<%= pkg.name %>.css': ['src/**/*.css']}]
+		options: {
+			stripBanners: {
+				separator: "\n",
+				block: true, /*! ...will be untouched... */
+				line: true
+			}
+		},
+		build: {
+			files: [
+				{'build/<%= pkg.name %>.css': ['src/**/*.css']},
+				{'build/<%= pkg.name %>.js': ['src/intro.txt', 'src/knockoutjs-tokenfield.js', 'src/outro.txt']}
+			]
 		}
 	},
 
@@ -33,17 +28,26 @@ grunt.initConfig({
 				drop_console: true,
 			}
 		},
-		dist: {
+		build: {
 			files: [
 				{
 					expand: true,
 					cwd: 'src/',
 					src: ['**/*.js','!**/*.min.js'],
-					dest: 'dist/',
+					dest: 'build/',
 					ext: '.min.js',
 					extDot: 'last',
 					filter: 'isFile'
 				}
+			]
+		}
+	},
+
+	copy: {
+		dist: {
+			files: [
+				{'dist/<%= pkg.name %>.css': ['build/**/*.css']},
+				{'dist/<%= pkg.name %>.js': ['build/**/*.js']}
 			]
 		}
 	}
@@ -52,6 +56,8 @@ grunt.initConfig({
 
 grunt.loadNpmTasks('grunt-contrib-concat');
 grunt.loadNpmTasks('grunt-contrib-uglify');
+grunt.loadNpmTasks('grunt-contrib-copy');
 grunt.registerTask('default', ['concat','uglify']);
+grunt.registerTask('dist', ['default','copy']);
 
 };
