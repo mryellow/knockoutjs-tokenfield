@@ -30,6 +30,12 @@ ko.bindingHandlers['tokenField'] = {
     init: function(element, valueAccessor, allBindingsAccessor, deprecated, bindingContext) {
     	console.log('--INIT:'+element.id);
 
+		// If it doesn't have an ID, give it one.
+		if (!element.id) {
+			var id = new Date().getTime() + '' + Math.floor((1 + Math.random()) * 100);
+			element.id = id;
+		}
+
 		var observable = valueAccessor() || { };
 		//var bindings = new tokenFieldUtils().processBindings(allBindingsAccessor);
 
