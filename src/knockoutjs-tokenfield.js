@@ -22,7 +22,7 @@ ko.tokenfield = {};
 /**
  * Tokenfield custom binding
  */
-ko.bindingHandlers.tokenField = {
+ko.bindingHandlers['tokenField'] = {
 
 	/**
      * ko binding init
